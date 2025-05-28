@@ -1,16 +1,15 @@
-import { useState } from "react";
-import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
-const Signup = () => {
+const Signin = () => {
     const [formData, setFormData] = useState({
-        username: '',
         email: '',
         password: ''
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -19,8 +18,10 @@ const Signup = () => {
         }));
     };
 
-    const handleSubmit = async () => {
-        if (!formData.username || !formData.email || !formData.password) {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!formData.email || !formData.password) {
             setError('Please fill in all fields');
             return;
         }
@@ -29,47 +30,41 @@ const Signup = () => {
         setError('');
 
         try {
-            const response = await fetch("http://localhost:5000/user/api/signup", {
+            const response = await fetch("http://localhost:5000/user/api/signin", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData)
             });
-
+            
             const data = await response.json();
-
+            
             if (response.ok) {
-                console.log(data);
-                console.log("User registered successfully");
-                setFormData({ username: '', email: '', password: '' });
-                alert("Registration successful! You can now log in.");
+                console.log("Signed in successfully:", data);
+                alert("Login successful!");
             } else {
-                setError(data.message || 'Registration failed');
-                console.log("Registration failed:", data.message || 'Unknown error');
+                setError(data.message || 'Login failed');
+                console.log("Login failed:", data.message || 'Unknown error');
             }
-        } catch (error) {
+        } catch (err) {
             setError("Network error. Please try again.");
-            console.log("User registration failed:", error.message);
+            console.log("Login error:", err.message);
         } finally {
             setLoading(false);
         }
     };
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            handleSubmit();
-        }
-    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-violet-50 to-gray-100 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
                     <div className="text-center mb-8">
                         <div className="w-16 h-16 bg-gradient-to-r from-violet-500 to-violet-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <User className="w-8 h-8 text-white" />
+                            <Lock className="w-8 h-8 text-white" />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-2">Create Account</h2>
-                        <p className="text-gray-600">Join us today and get started</p>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back</h2>
+                        <p className="text-gray-600">Sign in to your Autonova account</p>
                     </div>
 
                     <div className="space-y-6">
@@ -81,28 +76,7 @@ const Signup = () => {
                         )}
 
                         <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
-                                Username
-                            </label>
-                            <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <User className="h-5 w-5 text-gray-400" />
-                                </div>
-                                <input
-                                    type="text"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleInputChange}
-                                    onKeyPress={handleKeyPress}
-                                    placeholder="Enter your username"
-                                    autoComplete="username"
-                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors duration-200"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                 Email Address
                             </label>
                             <div className="relative">
@@ -112,18 +86,18 @@ const Signup = () => {
                                 <input
                                     type="email"
                                     name="email"
+                                    id="email"
                                     value={formData.email}
                                     onChange={handleInputChange}
-                                    onKeyPress={handleKeyPress}
-                                    placeholder="Enter your email address"
+                                    placeholder="you@example.com"
                                     autoComplete="email"
+                                    required
                                     className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors duration-200"
                                 />
                             </div>
                         </div>
-
                         <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                 Password
                             </label>
                             <div className="relative">
@@ -133,11 +107,12 @@ const Signup = () => {
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     name="password"
+                                    id="password"
                                     value={formData.password}
                                     onChange={handleInputChange}
-                                    onKeyPress={handleKeyPress}
-                                    placeholder="Create a strong password"
-                                    autoComplete="new-password"
+                                    placeholder="••••••••"
+                                    autoComplete="current-password"
+                                    required
                                     className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors duration-200"
                                 />
                                 <button
@@ -154,6 +129,15 @@ const Signup = () => {
                             </div>
                         </div>
 
+                        <div className="flex justify-end">
+                            <button
+                                type="button"
+                                className="text-sm text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200"
+                            >
+                                Forgot your password?
+                            </button>
+                        </div>
+
                         <button
                             type="button"
                             onClick={handleSubmit}
@@ -163,34 +147,25 @@ const Signup = () => {
                             {loading ? (
                                 <div className="flex items-center justify-center gap-2">
                                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                    <span>Creating Account...</span>
+                                    <span>Signing In...</span>
                                 </div>
                             ) : (
-                                'Create Account'
+                                'Sign In'
                             )}
                         </button>
                     </div>
-
                     <div className="mt-8 text-center">
                         <p className="text-sm text-gray-600">
-                            Already have an account?{' '}
-                            <button className="text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200"
-                            >
-                                Sign in here
+                            Don't have an account?{' '}
+                            <button className="text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200">
+                                Sign up here
                             </button>
                         </p>
                     </div>
                 </div>
                 <div className="mt-6 text-center">
                     <p className="text-xs text-gray-500">
-                        By creating an account, you agree to our{' '}
-                        <button className="text-violet-600 hover:text-violet-700 underline">
-                            Terms of Service
-                        </button>{' '}
-                        and{' '}
-                        <button className="text-violet-600 hover:text-violet-700 underline">
-                            Privacy Policy
-                        </button>
+                        Protected by industry-standard encryption
                     </p>
                 </div>
             </div>
@@ -198,4 +173,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default Signin;
