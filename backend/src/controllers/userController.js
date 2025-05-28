@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 export const signup = async (req, res) => {
   try {
     const { username, email, password, isSeller } = req.body;
+
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -14,13 +15,25 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "Email already registered" });
     }
 
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(400).json({ message: "Username already taken" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, email, password: hashedPassword, isSeller });
+    const user = new User({
+      username,
+      email,
+      password: hashedPassword,
+      isSeller,
+    });
     await user.save();
 
-    const token = jwt.sign({ id: user._id, isSeller: user.isSeller }, process.env.JWT_SECRET, {
-      expiresIn: "7d"
-    });
+    const token = jwt.sign(
+      { id: user._id, isSeller: user.isSeller },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
     res.status(201).json({
       message: "User registered successfully",
@@ -29,10 +42,32 @@ export const signup = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
-        isSeller: user.isSeller
-      }
+        isSeller: user.isSeller,
+      },
     });
   } catch (error) {
+    console.error("Signup Error:", error); 
     res.status(500).json({ message: "Registration failed", error: error.message });
   }
 };
+
+
+export const signin =  async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' }); 
+    res.json({ message: 'Login successful', token, userId: user._id, username: user.username, isSeller: user.isSeller });
+  } catch (error) {
+    res.status(500).json({ message: 'Login failed', error: error.message });
+  }
+}
