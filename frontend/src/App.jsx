@@ -1,8 +1,10 @@
-import React from 'react'
+import Signup from "./Pages/Signup"
 
 const App = () => {
   return (
-    <div className='text-gray-700 text-5xl font-bold '>App</div>
+    <div>
+      <Signup />
+    </div>
   )
 }
 
