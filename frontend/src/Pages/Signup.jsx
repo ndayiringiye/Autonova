@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -11,6 +10,7 @@ const Signup = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -18,7 +18,6 @@ const Signup = () => {
             [name]: value
         }));
     };
-
     const handleSubmit = async () => {
         if (!formData.username || !formData.email || !formData.password) {
             setError('Please fill in all fields');
@@ -42,8 +41,15 @@ const Signup = () => {
             if (response.ok) {
                 console.log(data);
                 console.log("User registered successfully");
+                if (data.token) {
+                    sessionStorage.setItem('authToken', data.token);
+                    sessionStorage.setItem('user', JSON.stringify(data.user));
+                }
+                
                 setFormData({ username: '', email: '', password: '' });
-                alert("Registration successful! You can now log in.");
+                
+                window.location.href = '/signin';
+                
             } else {
                 setError(data.message || 'Registration failed');
                 console.log("Registration failed:", data.message || 'Unknown error');
@@ -55,11 +61,13 @@ const Signup = () => {
             setLoading(false);
         }
     };
+    
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleSubmit();
         }
     };
+    
     return (
         <div className="min-h-screen bg-gradient-to-br from-violet-50 to-gray-100 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
@@ -69,7 +77,7 @@ const Signup = () => {
                             <User className="w-8 h-8 text-white" />
                         </div>
                         <h2 className="text-2xl font-bold text-gray-800 mb-2">Create Account</h2>
-                        <p className="text-gray-600">Join us today and get started</p>
+                        <p className="text-gray-600">Join us today and start your journey to owning your dream car at AutoNova.com</p>
                     </div>
 
                     <div className="space-y-6">
@@ -174,7 +182,9 @@ const Signup = () => {
                     <div className="mt-8 text-center">
                         <p className="text-sm text-gray-600">
                             Already have an account?{' '}
-                            <button className="text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200"
+                            <button 
+                                onClick={() => window.location.href = '/signin'}
+                                className="text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200"
                             >
                                 Sign in here
                             </button>

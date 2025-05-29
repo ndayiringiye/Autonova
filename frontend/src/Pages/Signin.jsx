@@ -42,7 +42,16 @@ const Signin = () => {
             
             if (response.ok) {
                 console.log("Signed in successfully:", data);
-                alert("Login successful!");
+                
+                // Store the token and user data
+                if (data.token) {
+                    sessionStorage.setItem('authToken', data.token);
+                    sessionStorage.setItem('user', JSON.stringify(data.user));
+                }
+                
+                // Navigate to welcome page
+                window.location.href = '/welcome';
+                
             } else {
                 setError(data.message || 'Login failed');
                 console.log("Login failed:", data.message || 'Unknown error');
@@ -52,6 +61,12 @@ const Signin = () => {
             console.log("Login error:", err.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSubmit(e);
         }
     };
 
@@ -89,6 +104,7 @@ const Signin = () => {
                                     id="email"
                                     value={formData.email}
                                     onChange={handleInputChange}
+                                    onKeyPress={handleKeyPress}
                                     placeholder="you@example.com"
                                     autoComplete="email"
                                     required
@@ -110,6 +126,7 @@ const Signin = () => {
                                     id="password"
                                     value={formData.password}
                                     onChange={handleInputChange}
+                                    onKeyPress={handleKeyPress}
                                     placeholder="••••••••"
                                     autoComplete="current-password"
                                     required
@@ -157,7 +174,10 @@ const Signin = () => {
                     <div className="mt-8 text-center">
                         <p className="text-sm text-gray-600">
                             Don't have an account?{' '}
-                            <button className="text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200">
+                            <button 
+                                onClick={() => window.location.href = '/signup'}
+                                className="text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200"
+                            >
                                 Sign up here
                             </button>
                         </p>
