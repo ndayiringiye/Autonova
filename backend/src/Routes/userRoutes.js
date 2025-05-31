@@ -1,9 +1,11 @@
 import express from "express";
-import { signin, signup } from "../controllers/userController.js";
+import { signup, signin, forgotPassword, resetPassword } from "../controllers/userController.js";
+
 const router = express.Router();
 
-router.post("/api/signup", signup);
-router.post("/api/signin", signin);
+router.post("/signup", signup);
+router.post("/signin", signin);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
 
-
-export default router
+export default router;

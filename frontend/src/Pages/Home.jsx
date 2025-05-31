@@ -6,6 +6,7 @@ import car4 from "../../public/images/car4.png";
 import car5 from "../../public/images/car5.png";
 import car6 from "../../public/images/car6.png";
 import { FaLongArrowAltRight, FaLongArrowAltLeft } from "react-icons/fa";
+import VennDiagram from "../Components/Services";
 
 const images = [car1, car2, car3, car4, car5, car6];
 
@@ -34,7 +35,8 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-violet-100 to-white py-10 px-4">
+    <div>
+    <div className="min-h-screen w-full bg-gradient-to-br from-violet-100 to-white py-14 px-4">
       <div className="text-center max-w-4xl mx-auto mb-10">
         <h1 className="text-5xl md:text-6xl font-extrabold text-violet-700 mb-4">
           Drive Your Dreams.
@@ -75,6 +77,8 @@ const Home = () => {
           </button>
         </div>
       </div>
+    </div>
+    <VennDiagram />
     </div>
   );
 };

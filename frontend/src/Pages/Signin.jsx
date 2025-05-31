@@ -43,13 +43,11 @@ const Signin = () => {
             if (response.ok) {
                 console.log("Signed in successfully:", data);
                 
-                // Store the token and user data
                 if (data.token) {
                     sessionStorage.setItem('authToken', data.token);
                     sessionStorage.setItem('user', JSON.stringify(data.user));
                 }
                 
-                // Navigate to welcome page
                 window.location.href = '/welcome';
                 
             } else {
@@ -147,12 +145,14 @@ const Signin = () => {
                         </div>
 
                         <div className="flex justify-end">
+                            <a href="/forgotPassword">
                             <button
                                 type="button"
                                 className="text-sm text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200"
                             >
                                 Forgot your password?
                             </button>
+                            </a>
                         </div>
 
                         <button
