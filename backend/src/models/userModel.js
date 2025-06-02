@@ -8,6 +8,12 @@ const userSchema = new mongoose.Schema({
         default: "avatar.png"
     },
     isSeller: { type: Boolean, default: false },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Date
+    },
 });
 const User = mongoose.model("User", userSchema)
 export default User;
