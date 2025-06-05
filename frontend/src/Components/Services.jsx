@@ -40,7 +40,7 @@ export default function VennDiagram() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="absolute bottom-4 right-4 w-56 h-56 bg-violet-500 rounded-full opacity-90 z-30 flex items-center justify-center shadow-lg">
+                            <div className="absolute bottom-4 right-4 w-56 h-56 bg-violet-700 rounded-full opacity-90 z-30 flex items-center justify-center shadow-lg">
                                 <div className="text-center text-gray-100 font-semibold text-sm space-y-2 px-2">
                                     <div className="flex items-center gap-2">
                                         <FaShippingFast /> <span>Quick Logistics</span>

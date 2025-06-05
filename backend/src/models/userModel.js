@@ -8,9 +8,14 @@ const userSchema = new mongoose.Schema({
         default: "avatar.png"
     },
     isSeller: { type: Boolean, default: false },
+    enum:{
+     type: ["buyer", "seller"],
+     default : "buyer"
+    },
     resetPasswordToken: {
         type: String
     },
+
     resetPasswordExpires: {
         type: Date
     },
