@@ -28,6 +28,7 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
       isSeller,
+       role: role || "buyer"
     });
     await user.save();
 

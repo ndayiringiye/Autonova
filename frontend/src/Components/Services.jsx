@@ -1,8 +1,10 @@
 import { Target, Lightbulb, Search } from 'lucide-react';
 import { FaCarSide, FaShippingFast, FaTags, FaIndustry } from 'react-icons/fa';
+import CarDealership from './Entry';
 
 export default function VennDiagram() {
     return (
+        <div>
         <div className=" flex bg-gray-200 mb-6 justify-center">
             <div className="max-w-6xl w-full">
                 <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
@@ -100,6 +102,8 @@ export default function VennDiagram() {
                     </div>
                 </div>
             </div>
+        </div>
+        <CarDealership />
         </div>
     );
 }
