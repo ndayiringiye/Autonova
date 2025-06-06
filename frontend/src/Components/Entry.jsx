@@ -142,8 +142,8 @@ export default function CarDealership() {
   }
 
   return (
-    <div>
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <div className='w-11/12 mx-auto grid grid-cols-2 gap-x-3'>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 mt-20 via-blue-900 to-slate-900">
       <div className="relative bg-gradient-to-r from-black/70 to-black/50 bg-blend-overlay bg-cover bg-center min-h-[70vh] flex items-center"
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200&h=800&fit=crop')" }}>
         <div className="container mx-auto px-6">
@@ -278,7 +278,9 @@ export default function CarDealership() {
         </div>
       </div>
     </div>
+    <div>
     <Sidebar />
+    </div>
     </div>
   );
 }
