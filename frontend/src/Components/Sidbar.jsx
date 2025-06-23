@@ -1,7 +1,6 @@
 import React from 'react';
 import { Clock, Leaf, Shield, Star, Award, Headphones } from 'lucide-react';
 import BookingProcess from './Books';
-
 const Sidebar = () => {
   const services = [
     {

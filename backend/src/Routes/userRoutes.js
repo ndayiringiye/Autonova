@@ -9,6 +9,6 @@ router.post("/signup", signup);
 router.post("/signin", signin);
 router.post("/forgotPassword", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
-router.post("/createCar", createCar);
+router.post("/createCar",protect, createCar);
 
 export default router;
