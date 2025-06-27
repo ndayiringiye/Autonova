@@ -19,6 +19,16 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpires: {
         type: Date
     },
+     balance: { 
+        type: Number,
+        default: 0,
+    },
+    subscribedSellers: [ 
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ]
 });
 const User = mongoose.model("User", userSchema)
 export default User;

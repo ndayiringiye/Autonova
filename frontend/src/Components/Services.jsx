@@ -1,6 +1,6 @@
 import { Target, Lightbulb, Search } from 'lucide-react';
 import { FaCarSide, FaShippingFast, FaTags, FaIndustry } from 'react-icons/fa';
-
+import Categories from './Categories';
 export default function VennDiagram() {
     return (
         <div>
@@ -101,6 +101,7 @@ export default function VennDiagram() {
                     </div>
                 </div>
             </div>
+            <Categories />
         </div>
     );
 }

@@ -6,10 +6,16 @@ import nodemailer from "nodemailer";
 
 export const signup = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (role && role !== "buyer") {
+      if (!req.user || req.user.role !== "admin") {
+        return res.status(403).json({ message: "Forbidden: only admins can assign roles" });
+      }
     }
 
     const existingUser = await User.findOne({ email });
@@ -23,15 +29,18 @@ export const signup = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = new User({
       username,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      role: role || "buyer",  
     });
+
     await user.save();
 
     const token = jwt.sign(
-      { id: user._id, isSeller: user.isSeller },
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -43,18 +52,20 @@ export const signup = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role
       },
     });
   } catch (error) {
-    console.error("Signup Error:", error); 
+    console.error("Signup Error:", error);
     res.status(500).json({ message: "Registration failed", error: error.message });
   }
 };
 
 
-export const signin =  async (req, res) => {
+export const signin = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -65,12 +76,32 @@ export const signin =  async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' }); 
-    res.json({ message: 'Login successful', token, userId: user._id, username: user.username, isSeller: user.isSeller });
+    const token = jwt.sign(
+      {
+        id: user._id,                
+        email: user.email,
+        role: user.role             
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({
+      message: 'Login successful',
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: 'Login failed', error: error.message });
   }
 };
+
+
 
 
 export const forgotPassword = async (req, res) => {

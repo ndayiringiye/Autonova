@@ -5,8 +5,6 @@ const carSchema = new mongoose.Schema({
   description: { type: String, required: true },
   price: { type: Number, required: true },
   imageUrl: { type: String },
-  make: { type: String },
-  model: { type: String },
   year: {
     type: Number,
     validate: {
@@ -14,13 +12,15 @@ const carSchema = new mongoose.Schema({
       message: "Year cannot be in the future."
     }
   },
-  condition: {
+  user: {
     type: String,
-    enum: ['New', 'Used'],
-    default: 'Used'
+    enum: ['buyer', 'seller'],
+    default: 'buyer'
   },
-  location: { type: String },
-  seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  buyer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   createdAt: { type: Date, default: Date.now },
 });
