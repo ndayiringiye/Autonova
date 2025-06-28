@@ -1,15 +1,18 @@
-import { useState } from "react";
-import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useState, useRef } from "react";
+import { User, Mail, Lock, Eye, EyeOff, Camera } from 'lucide-react';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
-        password: ''
+        password: '',
+        profile: null
     });
+    const [previewImage, setPreviewImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const fileInputRef = useRef(null);
     
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -18,6 +21,24 @@ const Signup = () => {
             [name]: value
         }));
     };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData(prev => ({
+                ...prev,
+                profile: file
+            }));
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handleSubmit = async () => {
         if (!formData.username || !formData.email || !formData.password) {
             setError('Please fill in all fields');
@@ -28,12 +49,19 @@ const Signup = () => {
         setError('');
 
         try {
+            const formDataToSend = new FormData();
+            formDataToSend.append('username', formData.username);
+            formDataToSend.append('email', formData.email);
+            formDataToSend.append('password', formData.password);
+            if (formData.profile) {
+                formDataToSend.append('profile', formData.profile);
+            }
+
             const response = await fetch("http://localhost:5000/user/signup", {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
+                body: formDataToSend
+                // Don't set Content-Type header when using FormData,
+                // the browser will set it automatically with the correct boundary
             });
 
             const data = await response.json();
@@ -46,7 +74,8 @@ const Signup = () => {
                     sessionStorage.setItem('user', JSON.stringify(data.user));
                 }
                 
-                setFormData({ username: '', email: '', password: '' });
+                setFormData({ username: '', email: '', password: '', profile: null });
+                setPreviewImage(null);
                 
                 window.location.href = '/signin';
                 
@@ -67,15 +96,40 @@ const Signup = () => {
             handleSubmit();
         }
     };
+
+    const triggerFileInput = () => {
+        fileInputRef.current.click();
+    };
     
     return (
         <div className="min-h-screen bg-gradient-to-br from-violet-50 to-gray-100 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
                     <div className="text-center mb-8">
-                        <div className="w-16 h-16 bg-gradient-to-r from-violet-500 to-violet-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <User className="w-8 h-8 text-white" />
+                        <div 
+                            className="w-16 h-16 bg-gradient-to-r from-violet-500 to-violet-600 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden relative cursor-pointer"
+                            onClick={triggerFileInput}
+                        >
+                            {previewImage ? (
+                                <img 
+                                    src={previewImage} 
+                                    alt="Profile preview" 
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <User className="w-8 h-8 text-white" />
+                            )}
+                            <div className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-sm">
+                                <Camera className="w-4 h-4 text-violet-600" />
+                            </div>
                         </div>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleImageChange}
+                            accept="image/*"
+                            className="hidden"
+                        />
                         <h2 className="text-2xl font-bold text-gray-800 mb-2">Create Account</h2>
                         <p className="text-gray-600">Join us today and start your journey to owning your dream car at AutoNova.com</p>
                     </div>

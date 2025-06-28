@@ -7,10 +7,10 @@ import nodemailer from "nodemailer";
 export const signup = async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
-
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    const profile = req.file ? req.file.filename : 'avatar.png';
 
     if (role && role !== "buyer") {
       if (!req.user || req.user.role !== "admin") {
@@ -34,7 +34,8 @@ export const signup = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      role: role || "buyer",  
+      role: role || "buyer",
+      profile
     });
 
     await user.save();
@@ -52,7 +53,8 @@ export const signup = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
-        role: user.role
+        role: user.role,
+        profile: user.profile
       },
     });
   } catch (error) {
@@ -78,9 +80,9 @@ export const signin = async (req, res) => {
 
     const token = jwt.sign(
       {
-        id: user._id,                
+        id: user._id,
         email: user.email,
-        role: user.role             
+        role: user.role
       },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
@@ -117,7 +119,7 @@ export const forgotPassword = async (req, res) => {
     const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
     user.resetPasswordToken = hashedToken;
-    user.resetPasswordExpires = Date.now() + 1000 * 60 * 10; 
+    user.resetPasswordExpires = Date.now() + 1000 * 60 * 10;
     await user.save();
 
     const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
