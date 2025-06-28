@@ -1,30 +1,20 @@
 import Car from "../models/productSchema.js";
 
 export const createCar = async (req, res) => {
-  const { title, description, price, imageUrl, make, model, year, condition, location } = req.body;
+  const { title, description, price, imageUrl, year, user, likes } = req.body;
 
   try {
-    if (!title || !description || !price || !imageUrl || !make || !model || !year || !condition || !location) {
+    if (!title || !description || !price || !imageUrl || !year || !user) {
       return res.status(400).json({ message: "All information is required" });
     }
-
-    const sellerId = req.user?.id || req.user?._id; 
-
-    if (!sellerId) {
-      return res.status(401).json({ message: "Unauthorized. Seller ID missing" });
-    }
-
     const newCar = new Car({
       title,
       description,
       price,
       imageUrl,
-      make,
-      model,
       year,
-      condition,
-      location,
-      seller: sellerId
+      user,
+      likes: likes || []
     });
 
     const savedCar = await newCar.save();

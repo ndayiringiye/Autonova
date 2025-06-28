@@ -7,10 +7,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "avatar.png"
     },
-    isSeller: { type: Boolean, default: false },
   role: {
   type: String,
-  enum: ["buyer", "seller"],
+  enum: ["buyer", "seller", "admin"],
   default: "buyer"
 },
     resetPasswordToken: {
@@ -20,6 +19,16 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpires: {
         type: Date
     },
+     balance: { 
+        type: Number,
+        default: 0,
+    },
+    subscribedSellers: [ 
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ]
 });
 const User = mongoose.model("User", userSchema)
 export default User;

@@ -18,49 +18,57 @@ const Signin = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        if (!formData.email || !formData.password) {
-            setError('Please fill in all fields');
-            return;
-        }
+   const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        setLoading(true);
-        setError('');
+    if (!formData.email || !formData.password) {
+        setError('Please fill in all fields');
+        return;
+    }
 
-        try {
-            const response = await fetch("http://localhost:5000/user/signin", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                console.log("Signed in successfully:", data);
-                
-                if (data.token) {
-                    sessionStorage.setItem('authToken', data.token);
-                    sessionStorage.setItem('user', JSON.stringify(data.user));
-                }
-                
-                window.location.href = '/welcome';
-                
-            } else {
-                setError(data.message || 'Login failed');
-                console.log("Login failed:", data.message || 'Unknown error');
+    setLoading(true);
+    setError('');
+
+    try {
+        const response = await fetch("http://localhost:5000/user/signin", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log("Signed in successfully:", data);
+
+            if (data.token) {
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
             }
-        } catch (err) {
-            setError("Network error. Please try again.");
-            console.log("Login error:", err.message);
-        } finally {
-            setLoading(false);
+
+            const role = data.user?.role;
+            if (role === 'buyer') {
+                window.location.href = '/welcome';
+            } else if (role === 'seller' || role === 'admin') {
+                window.location.href = '/dashboard';
+            } else {
+                window.location.href = '/'; 
+            }
+
+        } else {
+            setError(data.message || 'Login failed');
+            console.error("Login failed:", data.message || 'Unknown error');
         }
-    };
+    } catch (err) {
+        setError("Network error. Please try again.");
+        console.error("Login error:", err.message);
+    } finally {
+        setLoading(false);
+    }
+};
+
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
@@ -110,6 +118,7 @@ const Signin = () => {
                                 />
                             </div>
                         </div>
+
                         <div className="space-y-2">
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                 Password
@@ -135,23 +144,19 @@ const Signin = () => {
                                     onClick={() => setShowPassword(!showPassword)}
                                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
                                 >
-                                    {showPassword ? (
-                                        <EyeOff className="h-5 w-5" />
-                                    ) : (
-                                        <Eye className="h-5 w-5" />
-                                    )}
+                                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                 </button>
                             </div>
                         </div>
 
                         <div className="flex justify-end">
                             <a href="/forgotPassword">
-                            <button
-                                type="button"
-                                className="text-sm text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200"
-                            >
-                                Forgot your password?
-                            </button>
+                                <button
+                                    type="button"
+                                    className="text-sm text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200"
+                                >
+                                    Forgot your password?
+                                </button>
                             </a>
                         </div>
 
@@ -171,10 +176,11 @@ const Signin = () => {
                             )}
                         </button>
                     </div>
+
                     <div className="mt-8 text-center">
                         <p className="text-sm text-gray-600">
                             Don't have an account?{' '}
-                            <button 
+                            <button
                                 onClick={() => window.location.href = '/signup'}
                                 className="text-violet-600 hover:text-violet-700 font-medium transition-colors duration-200"
                             >
@@ -183,6 +189,7 @@ const Signin = () => {
                         </p>
                     </div>
                 </div>
+
                 <div className="mt-6 text-center">
                     <p className="text-xs text-gray-500">
                         Protected by industry-standard encryption
