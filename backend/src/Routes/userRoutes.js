@@ -10,10 +10,10 @@ import { createAdmin } from "../controllers/adminController.js";
 import { createCar } from "../controllers/carController.js";
 import { protect } from "../middleware/authenticated.js";
 import { isAdmin } from "../middleware/isAdmin.js";
-
+import multer from 'multer';
 const router = express.Router();
-
-router.post("/signup", signup);
+const upload = multer({ dest: 'uploads/' });
+router.post('/signup', upload.single('profile'), signup);
 router.post("/signin", signin);
 router.post("/forgotPassword", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
