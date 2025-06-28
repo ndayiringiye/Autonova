@@ -29,8 +29,6 @@ const Signup = () => {
                 ...prev,
                 profile: file
             }));
-
-            // Create preview
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewImage(reader.result);
@@ -60,8 +58,6 @@ const Signup = () => {
             const response = await fetch("http://localhost:5000/user/signup", {
                 method: 'POST',
                 body: formDataToSend
-                // Don't set Content-Type header when using FormData,
-                // the browser will set it automatically with the correct boundary
             });
 
             const data = await response.json();
