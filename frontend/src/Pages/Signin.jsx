@@ -18,52 +18,57 @@ const Signin = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+   const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        if (!formData.email || !formData.password) {
-            setError('Please fill in all fields');
-            return;
-        }
+    if (!formData.email || !formData.password) {
+        setError('Please fill in all fields');
+        return;
+    }
 
-        setLoading(true);
-        setError('');
+    setLoading(true);
+    setError('');
 
-        try {
-            const response = await fetch("http://localhost:5000/user/signin", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
+    try {
+        const response = await fetch("http://localhost:5000/user/signin", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
 
-            const data = await response.json();
+        const data = await response.json();
 
-            if (response.ok) {
-                console.log("Signed in successfully:", data);
+        if (response.ok) {
+            console.log("Signed in successfully:", data);
 
-                if (data.token) {
-                    localStorage.setItem('authToken', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                }
-
-                if (data.user?.role === 'seller') {
-                    window.location.href = '/seller-dashboard';
-                } else {
-                    window.location.href = '/welcome';
-                }
-            } else {
-                setError(data.message || 'Login failed');
-                console.error("Login failed:", data.message || 'Unknown error');
+            if (data.token) {
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
             }
-        } catch (err) {
-            setError("Network error. Please try again.");
-            console.error("Login error:", err.message);
-        } finally {
-            setLoading(false);
+
+            const role = data.user?.role;
+            if (role === 'buyer') {
+                window.location.href = '/welcome';
+            } else if (role === 'seller' || role === 'admin') {
+                window.location.href = '/dashboard';
+            } else {
+                window.location.href = '/'; 
+            }
+
+        } else {
+            setError(data.message || 'Login failed');
+            console.error("Login failed:", data.message || 'Unknown error');
         }
-    };
+    } catch (err) {
+        setError("Network error. Please try again.");
+        console.error("Login error:", err.message);
+    } finally {
+        setLoading(false);
+    }
+};
+
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
