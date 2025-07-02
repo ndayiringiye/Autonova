@@ -1,5 +1,5 @@
-import Comment from "../models/commentModel.js";
-import Car from "../models/carModel.js";
+import Comment from "../models/commentSchema.js";
+import Car from "../models/productSchema.js";
 import User from "../models/userModel.js";
 
 export const addComment = async (req, res) => {
