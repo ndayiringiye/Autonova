@@ -13,6 +13,7 @@ import multer from 'multer';
 import { addComment, getCarComments } from "../controllers/commentController.js";
 import { subscribeToCar, getSubscriptions, unsubscribeFromCar } from "../controllers/subscibeController.js";
 import { generateShareLinks } from "../controllers/sharingControlller.js";
+import { createLike } from "../controllers/lileController.js";
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 router.post('/signup', upload.single('profile'), signup);
@@ -20,6 +21,7 @@ router.post("/signin", signin);
 router.get("/getsingleuser/:userId", getSingleUser)
 
 router.post("/createCar", createCar);
+router.post("/like", protect, createLike);
 
 router.post("/subscribe", protect, subscribeToCar);
 router.get("/subscriptions/:buyerId", protect, getSubscriptions);
