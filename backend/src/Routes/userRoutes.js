@@ -14,14 +14,18 @@ import { addComment, getCarComments } from "../controllers/commentController.js"
 import { subscribeToCar, getSubscriptions, unsubscribeFromCar } from "../controllers/subscibeController.js";
 import { generateShareLinks } from "../controllers/sharingControlller.js";
 import { createLike } from "../controllers/lileController.js";
+import { getCarLikes } from "../controllers/getLIkesController.js";
+import { deleteLike } from "../controllers/unlikeCarController.js";
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 router.post('/signup', upload.single('profile'), signup);
 router.post("/signin", signin);
-router.get("/getsingleuser/:userId", getSingleUser)
+router.get("/getsingleuser/:userId", getSingleUser);
 
 router.post("/createCar", createCar);
 router.post("/like", protect, createLike);
+router.get("/likes/:carId", getCarLikes);
+router.delete("/unlike:carId", protect, deleteLike);
 
 router.post("/subscribe", protect, subscribeToCar);
 router.get("/subscriptions/:buyerId", protect, getSubscriptions);
@@ -30,7 +34,5 @@ router.get("/share/:carId", generateShareLinks);
 
 router.post("/:carId", protect, addComment);
 router.get('/:carId', getCarComments);
-
-
 
 export default router;
