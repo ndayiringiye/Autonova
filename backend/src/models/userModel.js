@@ -7,11 +7,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "avatar.png"
     },
-  role: {
-  type: String,
-  enum: ["buyer", "seller", "admin"],
-  default: "buyer"
-},
+    balance: {
+        type: Number,
+        default: 0
+    },
+    role: {
+        type: String,
+        enum: ["buyer", "seller", "admin"],
+        default: "buyer"
+    },
     resetPasswordToken: {
         type: String
     },
@@ -19,11 +23,11 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpires: {
         type: Date
     },
-     balance: { 
+    balance: {
         type: Number,
         default: 0,
     },
-    subscribedSellers: [ 
+    subscribedSellers: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
