@@ -7,10 +7,22 @@ const isValidStripeKey = process.env.STRIPE_SECRET_KEY &&
                         process.env.STRIPE_SECRET_KEY !== 'sk_test_YOUR_SECRET_KEY' &&
                         process.env.STRIPE_SECRET_KEY.startsWith('sk_');
 
-const stripe = isValidStripeKey ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
+console.log('DEBUG: Stripe configuration check:');
+console.log('DEBUG: STRIPE_SECRET_KEY exists:', !!process.env.STRIPE_SECRET_KEY);
+console.log('DEBUG: STRIPE_SECRET_KEY length:', process.env.STRIPE_SECRET_KEY?.length);
+console.log('DEBUG: STRIPE_SECRET_KEY starts with sk_:', process.env.STRIPE_SECRET_KEY?.startsWith('sk_'));
+console.log('DEBUG: STRIPE_SECRET_KEY first 20 chars:', process.env.STRIPE_SECRET_KEY?.substring(0, 20));
+console.log('DEBUG: isValidStripeKey:', isValidStripeKey);
+
+const stripe = isValidStripeKey ? new Stripe(process.env.STRIPE_SECRET_KEY.trim()) : null;
 
 const checkStripeAvailable = () => {
   if (!stripe) {
+    console.error('DEBUG: Stripe not available. Key validation details:');
+    console.error('DEBUG: Key exists:', !!process.env.STRIPE_SECRET_KEY);
+    console.error('DEBUG: Key value (first 20 chars):', process.env.STRIPE_SECRET_KEY?.substring(0, 20));
+    console.error('DEBUG: Key length:', process.env.STRIPE_SECRET_KEY?.length);
+    console.error('DEBUG: Starts with sk_:', process.env.STRIPE_SECRET_KEY?.startsWith('sk_'));
     throw new Error('Stripe is not configured. Please set a valid STRIPE_SECRET_KEY in your environment variables.');
   }
 };

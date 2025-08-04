@@ -17,6 +17,7 @@ import {
   FaShoppingCart,
 } from "react-icons/fa";
 import VennDiagram from "../Components/Services";
+import TopHitCars from "../Components/TopHitCars";
 
 const cars = [
   {
@@ -97,20 +98,9 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="mt-20">
       <div className="bg-gradient-to-br from-violet-100 to-white min-h-screen w-full pt-20 px-4">
-        <div className="text-center max-w-4xl mx-auto mb-12">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-violet-700 mb-4 flex justify-center items-center gap-2">
-            <FaCar className="text-violet-500" />
-            Welcome to AutoNova
-          </h1>
-          <p className="text-gray-700 text-lg md:text-xl">
-            Explore top car brands with the best deals on style, power, and performance.
-          </p>
-          <p className="text-gray-500 italic mt-2">
-            Discover your dream ride today — because you deserve excellence.
-          </p>
-        </div>
+        <TopHitCars />
 
         <div className="relative max-w-7xl mx-auto overflow-hidden">
           <div className="w-11/12 mx-auto">

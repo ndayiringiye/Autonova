@@ -112,20 +112,44 @@ export const getSingleCar = async (req, res) => {
   try {
     const { carId } = req.params;
     
+    console.log("DEBUG: Fetching car with ID:", carId);
+    
     const car = await Car.findById(carId)
       .populate('seller', 'username email role stripeAccountId chargesEnabled')
       .populate('buyer', 'username email')
       .populate('likes', 'username');
 
     if (!car) {
+      console.log("DEBUG: Car not found in database");
       return res.status(404).json({
         success: false,
         message: 'Car not found'
       });
     }
 
+    console.log("DEBUG: Car found, checking seller field:");
+    console.log("DEBUG: car.seller exists:", !!car.seller);
+    console.log("DEBUG: car.seller value:", car.seller);
+    console.log("DEBUG: Raw car document:", JSON.stringify(car.toObject(), null, 2));
+
+    // Check if seller field exists before saving
+    if (!car.seller) {
+      console.error("DEBUG: CRITICAL - Car document missing seller field!");
+      return res.status(500).json({
+        success: false,
+        error: "Car data integrity issue: missing seller field",
+        debug: {
+          carId: carId,
+          hasSellerField: !!car.seller,
+          carFields: Object.keys(car.toObject())
+        }
+      });
+    }
+
+    console.log("DEBUG: Incrementing views and saving...");
     car.views += 1;
     await car.save();
+    console.log("DEBUG: Car saved successfully");
 
     res.json({
       success: true,
@@ -133,9 +157,19 @@ export const getSingleCar = async (req, res) => {
     });
   } catch (error) {
     console.error("Get single car error:", error);
+    console.error("DEBUG: Full error details:", {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      errors: error.errors
+    });
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
+      debug: {
+        errorType: error.name,
+        validationErrors: error.errors
+      }
     });
   }
 };
