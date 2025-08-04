@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Continuous sliding animation */
+@keyframes continuousSlide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.continuous-slide {
+  animation: continuousSlide 30s linear infinite;
+}
+
+.continuous-slide:hover {
+  animation-play-state: paused;
+}

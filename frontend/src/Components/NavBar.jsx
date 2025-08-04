@@ -1,176 +1,165 @@
-import { useState, useEffect } from 'react';
-import { Car, LogOut, ChevronDown, Search, User, Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search, Heart, ShoppingCart, Menu, X, User } from "lucide-react";
+import { useEffect, useState } from "react";
 
-
-const Navbar = ({ user }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+function NavBar({ favoriteCount = 0, cartCount = 0 }) {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const navigationLinks = [
+    "Home",
+    "Shop",
+    "Luxury Rides",
+    "Electric Cars",
+    "Sport Cars",
+    "SUVs & Crossovers",
+    "Family Cars",
+    "Deals",
+  ];
+
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-gray-900/95 backdrop-blur-md border-b border-gray-800' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex items-center">
-            <div className="w-10 h-10 bg-gradient-to-r from-violet-600 to-blue-600 rounded-full flex items-center justify-center">
-              <Car className="w-5 h-5 text-white" />
-            </div>
-            <span className="ml-3 text-xl font-bold text-white">AutoNova</span>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled 
+        ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200" 
+        : "bg-gradient-to-b from-white to-white/90 shadow-md"
+    }`}>
+      <nav className="container mx-auto px-3 sm:px-4 lg:px-6">
+        <div className="flex items-center justify-between py-3 sm:py-4 lg:py-6">
+          <div className="flex items-center flex-shrink-0">
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">
+              Auto<span className="text-violet-500">Nova</span>
+            </h1>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="#" className="text-gray-400 hover:text-white transition-colors">Home</Link>
-            
-            <div className="relative">
-              <button 
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center text-gray-400 hover:text-white transition-colors"
-              >
-                Vehicles <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+          <div className="hidden lg:flex flex-1 max-w-2xl mx-8">
+            <div className="flex items-center w-full bg-gray-50/50 border border-gray-300 rounded-full py-3 px-6 hover:border-violet-500 focus-within:border-violet-500 transition-colors shadow-sm">
+              <form className="flex items-center w-full">
+                <input
+                  type="search"
+                  name="search"
+                  placeholder="Search cars, brands, models..."
+                  className="outline-none w-full text-sm bg-transparent text-gray-700 placeholder-gray-400 font-medium"
+                />
+                <button type="submit" className="ml-3 bg-violet-500 hover:bg-violet-600 text-white rounded-full h-8 w-8 flex items-center justify-center transition-colors">
+                  <Search size={16} />
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+            <div className="hidden lg:flex items-center gap-4 text-sm font-medium">
+              <a href="/signin" className="flex items-center gap-2 text-gray-700 hover:text-violet-500 transition-colors">
+                <User size={16} />
+                Sign In
+              </a>
+              <button className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white px-4 py-2 rounded-full transition-colors">
+                Join Now
               </button>
-              
-              {isDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-56 bg-gray-800 rounded-lg shadow-xl py-2 z-50 border border-gray-700">
-                  <Link to="#" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">New Arrivals</Link>
-                  <Link to="#" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Luxury Collection</Link>
-                  <Link to="#" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Electric Vehicles</Link>
-                  <Link to="#" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Sell Your Car</Link>
-                </div>
-              )}
-            </div>
-            
-            <Link to="#" className="text-gray-400 hover:text-white transition-colors">Dealers</Link>
-            <Link to="#" className="text-gray-400 hover:text-white transition-colors">About</Link>
-          </div>
-          <div className="hidden md:flex items-center space-x-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search makes, models..."
-                className="pl-10 pr-4 py-2 bg-gray-900/50 border border-violet-700 rounded-full text-sm  text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
-              />
             </div>
 
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <button className="flex items-center space-x-1 text-gray-300 hover:text-white">
-                  <User className="w-5 h-5" />
-                </button>
-                <button 
-                  onClick={() => { /* handle logout */ }}
-                  className="flex items-center space-x-1 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm text-white transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-3">
-                <Link 
-                  to="/signin" 
-                  className="px-4 py-2 text-sm text-gray-200 hover:text-gray-400 transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link 
-                  to="/signup" 
-                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 rounded-full text-sm text-white font-medium transition-all shadow-lg hover:shadow-blue-500/20"
-                >
-                  Register
-                </Link>
-              </div>
-            )}
-          </div>
+            <div className="flex items-center gap-1 sm:gap-2">
+              <button className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center">
+                <Heart size={16} sm:size={18} />
+                {favoriteCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-semibold text-[10px] sm:text-xs">
+                    {favoriteCount > 99 ? '99+' : favoriteCount}
+                  </span>
+                )}
+                {favoriteCount === 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gray-300 text-gray-600 text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-semibold text-[10px] sm:text-xs">
+                    0
+                  </span>
+                )}
+              </button>
 
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-300 hover:text-white focus:outline-none"
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+              <button className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-full hover:bg-green-50 hover:text-green-600 transition-colors flex items-center justify-center">
+                <ShoppingCart size={16} sm:size={18} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-semibold text-[10px] sm:text-xs">
+                    {cartCount > 99 ? '99+' : cartCount}
+                  </span>
+                )}
+                {cartCount === 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gray-300 text-gray-600 text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-semibold text-[10px] sm:text-xs">
+                    0
+                  </span>
+                )}
+              </button>
+
+              <button 
+                className="lg:hidden h-9 w-9 sm:h-10 sm:w-10 rounded-full hover:bg-gray-100 transition-colors flex items-center justify-center"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X size={18} sm:size={20} /> : <Menu size={18} sm:size={20} />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      {isMenuOpen && (
-        <div className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-gray-800">
-          <div className="px-4 py-3 space-y-4">
-            <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search vehicles..."
-                className="pl-10 pr-4 py-2 bg-gray-800/50 border border-gray-700 rounded-full text-sm text-white focus:outline-none w-full"
-              />
-            </div>
+        <div className="hidden lg:block border-t border-gray-200/50">
+          <ul className="flex items-center gap-8 py-4 text-sm font-medium overflow-x-auto">
+            {navigationLinks.map((link, index) => (
+              <li key={index} className="group cursor-pointer flex-shrink-0">
+                <a 
+                  href="#" 
+                  className="text-gray-600 hover:text-gray-900 transition-colors duration-200 whitespace-nowrap py-2 px-1 relative"
+                >
+                  {link}
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-violet-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"></div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
 
-            <Link to="/" className="block px-3 py-2 text-gray-300 hover:text-white rounded-lg">Home</Link>
-            
-            <div>
-              <button 
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center justify-between w-full px-3 py-2 text-gray-300 hover:text-white rounded-lg"
-              >
-                <span>Vehicles</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+      {isMobileMenuOpen && (
+        <div className="lg:hidden bg-white border-t border-gray-200">
+          <div className="container mx-auto px-3 sm:px-4 py-4">
+            <div className="mb-4">
+              <div className="flex items-center bg-gray-50/50 border border-gray-300 rounded-full py-2.5 sm:py-3 px-4">
+                <input
+                  type="search"
+                  placeholder="Search cars..."
+                  className="outline-none w-full text-sm bg-transparent text-gray-700 placeholder-gray-400"
+                />
+                <Search size={18} className="text-gray-500 ml-2" />
+              </div>
+            </div>
+            <div className="flex gap-2 sm:gap-3 mb-4">
+              <button className="flex-1 flex items-center justify-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 py-2.5 px-4 rounded-full transition-colors text-sm font-medium">
+                <User size={16} />
+                Sign In
               </button>
-              
-              {isDropdownOpen && (
-                <div className="ml-4 mt-2 space-y-2">
-                  <Link to="#" className="block px-3 py-2 text-gray-400 hover:text-white rounded-lg">New Arrivals</Link>
-                  <Link to="#" className="block px-3 py-2 text-gray-400 hover:text-white rounded-lg">Luxury Collection</Link>
-                  <Link to="#" className="block px-3 py-2 text-gray-400 hover:text-white rounded-lg">Electric Vehicles</Link>
-                  <Link to="#" className="block px-3 py-2 text-gray-400 hover:text-white rounded-lg">Sell Your Car</Link>
-                </div>
-              )}
+              <button className="flex-1 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-2.5 px-4 rounded-full transition-colors text-sm font-medium">
+                Join Now
+              </button>
             </div>
-            
-            <Link to="#" className="block px-3 py-2 text-gray-300 hover:text-white rounded-lg">Dealers</Link>
-            <Link to="#" className="block px-3 py-2 text-gray-300 hover:text-white rounded-lg">About</Link>
-
-            <div className="pt-4 border-t border-gray-800 space-y-3">
-              {user ? (
-                <>
-                  <Link to="#" className="block px-3 py-2 text-center bg-gray-800 hover:bg-gray-700 rounded-full text-white">My Profile</Link>
-                  <button 
-                    onClick={() => { /* handle logout */ }}
-                    className="w-full px-3 py-2 text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-full border border-red-400/30"
+            <ul className="space-y-1">
+              {navigationLinks.map((link, index) => (
+                <li key={index}>
+                  <a 
+                    href="#" 
+                    className="block py-3 px-4 text-gray-700 hover:bg-gray-50 hover:text-violet-500 rounded-lg transition-colors font-medium text-sm"
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/signin" 
-                    className="block px-3 py-2 text-center bg-gray-800 hover:bg-gray-700 rounded-full text-white"
-                  >
-                    Sign In
-                  </Link>
-                  <Link 
-                    to="/signup" 
-                    className="block px-3 py-2 text-center bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 rounded-full text-white font-medium"
-                  >
-                    Register Now
-                  </Link>
-                </>
-              )}
-            </div>
+                    {link}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       )}
-    </nav>
+    </header>
   );
-};
+}
 
-export default Navbar;
+export default NavBar;
