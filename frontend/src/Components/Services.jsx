@@ -8,7 +8,7 @@ export default function VennDiagram() {
                 <div className="max-w-6xl w-full">
                     <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
                         <div>
-                            <div className="relative w-[28rem] h-[28rem] flex-shrink-0 mx-auto">
+                            <div className="relative w-[28rem] h-[28rem] flex-shrink-0 ">
                                 <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-56 h-56 bg-yellow-400 rounded-full opacity-90 z-10 flex items-center justify-center shadow-lg">
                                     <div className="text-center text-gray-800 font-semibold text-sm space-y-2">
                                         <div className="flex items-center gap-2">
