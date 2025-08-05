@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import car1 from "../../public/images/car1.png";
 import car2 from "../../public/images/car2.png";
 import car3 from "../../public/images/car3.png";
@@ -18,6 +18,8 @@ import {
 } from "react-icons/fa";
 import VennDiagram from "../Components/Services";
 import TopHitCars from "../Components/TopHitCars";
+import CarCategories from "../Components/CarCategories";
+import NavBar from "../Components/NavBar";
 
 const cars = [
   {
@@ -66,6 +68,11 @@ const cars = [
 
 const Home = () => {
   const carouselRef = useRef(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -98,10 +105,15 @@ const Home = () => {
   };
 
   return (
-    <div className="mt-20">
-      <div className="bg-gradient-to-br from-violet-100 to-white min-h-screen w-full pt-20 px-4">
-        <TopHitCars />
-
+    <>
+      <NavBar
+        selectedCategory={selectedCategory}
+        onCategoryChange={handleCategoryChange}
+      />
+      <div className="mt-20">
+        <div className="bg-gradient-to-br from-violet-100 to-white min-h-screen w-full">
+          <TopHitCars />
+          <CarCategories selectedCategory={selectedCategory} />
         <div className="relative max-w-7xl mx-auto overflow-hidden">
           <div className="w-11/12 mx-auto">
             <div
@@ -165,11 +177,12 @@ const Home = () => {
             </button>
           </div>
         </div>
+        </div>
+        <div className="mt-20">
+          <VennDiagram />
+        </div>
       </div>
-      <div className="mt-20">
-        <VennDiagram />
-      </div>
-    </div >
+    </>
   );
 };
 

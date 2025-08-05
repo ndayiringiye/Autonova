@@ -154,7 +154,7 @@ const Welcome = () => {
             <div className="min-h-screen bg-gradient-to-br from-slate-900  via-blue-900 to-slate-900">
                 <div className="relative bg-gradient-to-r from-black/70 to-black/50 bg-blend-overlay bg-cover bg-center min-h-[70vh] flex items-center"
                     style={{ backgroundImage: "url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200&h=800&fit=crop')" }}>
-                    <div className="container mx-auto px-6 pt-20">
+                    <div className=" px-6 pt-20">
                         <div className="max-w-3xl">
                             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
                                 Unlock the Freedom to
@@ -174,7 +174,7 @@ const Welcome = () => {
                         </div>
                     </div>
                 </div>
-                <div className="container mx-auto px-6 py-16">
+                <div className=" px-6 py-16">
                     <div className="text-center mb-12">
                         <h2 className="text-4xl font-bold text-white mb-4">Featured Premium Vehicles</h2>
                         <p className="text-gray-300 text-lg max-w-2xl mx-auto">

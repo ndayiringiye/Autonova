@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Continuous sliding animation */
 @keyframes continuousSlide {
   0% {
     transform: translateX(0);
@@ -13,7 +12,7 @@
 }
 
 .continuous-slide {
-  animation: continuousSlide 30s linear infinite;
+   animation: slide 10s infinite linear;
 }
 
 .continuous-slide:hover {

@@ -1,7 +1,7 @@
 import { Search, Heart, ShoppingCart, Menu, X, User } from "lucide-react";
 import { useEffect, useState } from "react";
 
-function NavBar({ favoriteCount = 0, cartCount = 0 }) {
+function NavBar({ favoriteCount = 0, cartCount = 0, selectedCategory = "All", onCategoryChange }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -14,15 +14,21 @@ function NavBar({ favoriteCount = 0, cartCount = 0 }) {
   }, []);
 
   const navigationLinks = [
-    "Home",
-    "Shop",
-    "Luxury Rides",
-    "Electric Cars",
-    "Sport Cars",
-    "SUVs & Crossovers",
-    "Family Cars",
-    "Deals",
+    { name: "Home", category: null },
+    { name: "Shop", category: "All" },
+    { name: "Luxury Rides", category: "Luxury Rides" },
+    { name: "Electric Cars", category: "Electric Cars" },
+    { name: "Sports Cars", category: "Sports Cars" },
+    { name: "SUVs & Crossovers", category: "SUVs & Crossovers" },
+    { name: "Family Cars", category: "Family Cars" },
+    { name: "Deals", category: "Deals" },
   ];
+
+  const handleCategoryClick = (category) => {
+    if (onCategoryChange && category) {
+      onCategoryChange(category);
+    }
+  };
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -105,17 +111,26 @@ function NavBar({ favoriteCount = 0, cartCount = 0 }) {
         </div>
         <div className="hidden lg:block border-t border-gray-200/50">
           <ul className="flex items-center gap-8 py-4 text-sm font-medium overflow-x-auto">
-            {navigationLinks.map((link, index) => (
-              <li key={index} className="group cursor-pointer flex-shrink-0">
-                <a 
-                  href="#" 
-                  className="text-gray-600 hover:text-gray-900 transition-colors duration-200 whitespace-nowrap py-2 px-1 relative"
-                >
-                  {link}
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-violet-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"></div>
-                </a>
-              </li>
-            ))}
+            {navigationLinks.map((link, index) => {
+              const isActive = selectedCategory === link.category;
+              return (
+                <li key={index} className="group cursor-pointer flex-shrink-0">
+                  <button
+                    onClick={() => handleCategoryClick(link.category)}
+                    className={`transition-colors duration-200 whitespace-nowrap py-2 px-1 relative ${
+                      isActive
+                        ? "text-violet-600 font-semibold"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    {link.name}
+                    <div className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-violet-500 to-purple-600 transform transition-transform duration-200 origin-left ${
+                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    }`}></div>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </nav>
@@ -143,17 +158,26 @@ function NavBar({ favoriteCount = 0, cartCount = 0 }) {
               </button>
             </div>
             <ul className="space-y-1">
-              {navigationLinks.map((link, index) => (
-                <li key={index}>
-                  <a 
-                    href="#" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-gray-50 hover:text-violet-500 rounded-lg transition-colors font-medium text-sm"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
+              {navigationLinks.map((link, index) => {
+                const isActive = selectedCategory === link.category;
+                return (
+                  <li key={index}>
+                    <button
+                      onClick={() => {
+                        handleCategoryClick(link.category);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`block w-full text-left py-3 px-4 rounded-lg transition-colors font-medium text-sm ${
+                        isActive
+                          ? "bg-violet-50 text-violet-600"
+                          : "text-gray-700 hover:bg-gray-50 hover:text-violet-500"
+                      }`}
+                    >
+                      {link.name}
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
