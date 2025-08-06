@@ -96,7 +96,7 @@ const TopHitCars = () => {
   }, [isAutoPlaying])
 
   return (
-    <div className="relative bg-gradient-to-br from-violet-50 to-violet-100 w-full min-h-screen py-12 overflow-hidden">
+    <div className="relative bg-gradient-to-br from-violet-50 to-violet-100 w-full  py-12 overflow-hidden">
       <div className="">
         <div
           className="relative"
