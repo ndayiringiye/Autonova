@@ -31,17 +31,87 @@ function NavBar({ favoriteCount = 0, cartCount = 0, selectedCategory = "All", on
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200" 
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200"
         : "bg-gradient-to-b from-white to-white/90 shadow-md"
-    }`}>
+      }`}>
       <nav className="container mx-auto px-3 sm:px-4 lg:px-6">
         <div className="flex items-center justify-between py-3 sm:py-4 lg:py-6">
           <div className="flex items-center flex-shrink-0">
-            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">
-              Auto<span className="text-violet-500">Nova</span>
-            </h1>
+            <svg width="240" height="45" viewBox="0 0 240 45" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="modernGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#6366F1" stopOpacity="1" />
+                  <stop offset="50%" stopColor="#8B5CF6" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#EC4899" stopOpacity="1" />
+                </linearGradient>
+                <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#1E293B" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#475569" stopOpacity="1" />
+                </linearGradient>
+                <linearGradient id="novaAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#7C3AED" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#EC4899" stopOpacity="1" />
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <g transform="translate(8, 6)">
+                <path d="M16 4 L26 4 Q30 4 32 8 L36 16 Q36 20 32 24 L26 32 Q22 32 16 32 L10 32 Q6 32 4 28 L0 20 Q0 16 4 12 L10 4 Q14 4 16 4 Z"
+                  fill="url(#modernGradient)"
+                  filter="url(#glow)"
+                  opacity="0.9" />
+
+                <path d="M18 10 L24 10 L27 16 L24 22 L18 22 L15 16 Z"
+                  fill="rgba(255,255,255,0.25)"
+                  stroke="rgba(255,255,255,0.4)"
+                  stroke-width="1" />
+
+                <path d="M18 12 L15.5 20 L17.5 20 L18 18.5 L22 18.5 L22.5 20 L24.5 20 L22 12 L18 12 Z M19 16.5 L21 16.5 L20 14.5 Z"
+                  fill="white"
+                  font-weight="bold" />
+
+                <g opacity="0.7">
+                  <path d="M38 12 L44 12" stroke="url(#modernGradient)" stroke-width="2" stroke-linecap="round" />
+                  <path d="M38 16 L42 16" stroke="url(#modernGradient)" stroke-width="2" stroke-linecap="round" />
+                  <path d="M38 20 L40 20" stroke="url(#modernGradient)" stroke-width="2" stroke-linecap="round" />
+                </g>
+              </g>
+
+              <g transform="translate(58, 28)">
+                <text x="0" y="0"
+                  font-family="'SF Pro Display', 'Inter', system-ui, sans-serif"
+                  font-size="20"
+                  font-weight="900"
+                  fill="url(#textGradient)"
+                  letter-spacing="-1px">AUTO</text>
+
+                <text x="52" y="0"
+                  font-family="'SF Pro Display', 'Inter', system-ui, sans-serif"
+                  font-size="20"
+                  font-weight="900"
+                  fill="url(#novaAccent)"
+                  letter-spacing="-1px">NOVA</text>
+              </g>
+
+              <rect x="58" y="32" width="60" height="1"
+                fill="#8B5CF6"
+                opacity="0.4"
+                rx="0.5" />
+
+              <text x="58" y="40"
+                font-family="'SF Pro Display', 'Inter', system-ui, sans-serif"
+                font-size="9"
+                font-weight="500"
+                fill="#111827"
+                letter-spacing="0.8px">Premium Auto Marketplace</text>
+            </svg>
           </div>
 
           <div className="hidden lg:flex flex-1 max-w-2xl mx-8">
@@ -100,7 +170,7 @@ function NavBar({ favoriteCount = 0, cartCount = 0, selectedCategory = "All", on
                 )}
               </button>
 
-              <button 
+              <button
                 className="lg:hidden h-9 w-9 sm:h-10 sm:w-10 rounded-full hover:bg-gray-100 transition-colors flex items-center justify-center"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
@@ -117,16 +187,14 @@ function NavBar({ favoriteCount = 0, cartCount = 0, selectedCategory = "All", on
                 <li key={index} className="group cursor-pointer flex-shrink-0">
                   <button
                     onClick={() => handleCategoryClick(link.category)}
-                    className={`transition-colors duration-200 whitespace-nowrap py-2 px-1 relative ${
-                      isActive
+                    className={`transition-colors duration-200 whitespace-nowrap py-2 px-1 relative ${isActive
                         ? "text-violet-600 font-semibold"
                         : "text-gray-600 hover:text-gray-900"
-                    }`}
+                      }`}
                   >
                     {link.name}
-                    <div className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-violet-500 to-purple-600 transform transition-transform duration-200 origin-left ${
-                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                    }`}></div>
+                    <div className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-violet-500 to-purple-600 transform transition-transform duration-200 origin-left ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                      }`}></div>
                   </button>
                 </li>
               );
@@ -167,11 +235,10 @@ function NavBar({ favoriteCount = 0, cartCount = 0, selectedCategory = "All", on
                         handleCategoryClick(link.category);
                         setIsMobileMenuOpen(false);
                       }}
-                      className={`block w-full text-left py-3 px-4 rounded-lg transition-colors font-medium text-sm ${
-                        isActive
+                      className={`block w-full text-left py-3 px-4 rounded-lg transition-colors font-medium text-sm ${isActive
                           ? "bg-violet-50 text-violet-600"
                           : "text-gray-700 hover:bg-gray-50 hover:text-violet-500"
-                      }`}
+                        }`}
                     >
                       {link.name}
                     </button>
