@@ -16,7 +16,6 @@ import {
   FaStar,
   FaShoppingCart,
 } from "react-icons/fa";
-// import VennDiagram from "../Components/Services";
 import TopHitCars from "../Components/TopHitCars";
 import CarCategories from "../Components/CarCategories";
 import NavBar from "../Components/NavBar";
@@ -178,9 +177,6 @@ const Home = () => {
           </div>
         </div>
         </div>
-        {/* <div className="mt-20">
-          <VennDiagram />
-        </div> */}
       </div>
     </>
   );
